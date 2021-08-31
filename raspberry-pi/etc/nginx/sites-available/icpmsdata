@@ -1,0 +1,18 @@
+server {
+	listen 80 default_server;
+	listen [::]:80;
+
+    root /var/www/html;
+    server_name pizero.local;
+    
+	location /static {
+        alias /home/pi/static;}
+
+    location / {
+        try_files $uri @wsgi;}
+
+    location @wsgi {
+        proxy_pass http://unix:/tmp/gunicorn.sock;
+        include proxy_params;}
+
+}

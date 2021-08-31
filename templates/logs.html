@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="60" >
+<title>London Geochronology Centre - Pump and Pyrometer Reader</title>
+<link href="{{ url_for('static',filename='css/text.css') }}" rel="stylesheet" type="text/css">
+<link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+</head>
+<body>
+	  <section class="banner">
+		  <div >
+              <P class="logo">London Geochronology Centre - Pump and Pyrometer Reader Server Status &nbsp CPU {{cputemperature}}&deg;C</P>
+              <p class="breadcrumbtext"><a href = "/" class="breadcrumblink">Return to index</a> &nbsp|&nbsp
+              <a href = "/pylog" class="breadcrumblink">Application Log</a> &nbsp|&nbsp
+              <a href = "/guaccesslog" class="breadcrumblink">Website Access Log</a> &nbsp|&nbsp
+              <a href = "/guerrorlog" class="breadcrumblink">Website Error Log</a> &nbsp|&nbsp
+              <a href = {{ url_for('static',filename='systemhalt.html') }} class="breadcrumblink">Turn off the Raspberry Pi</a></p>
+          </div>
+  </section>
+<section class="container2">
+    <p><b>{{log}}</b><br>
+        &nbsp</p>
+
+        <p class="tabledataleft">
+        {% for row in rows %}
+            {{row}}<br>
+
+         {% endfor %}
+
+        &nbsp</p>
+	</section>
+  <section class="banner">
+ <div class ="copyright">&copy;2021 - <strong>London Geochronology Centre</strong></div>
+	  </section>
+</body>
+</html>

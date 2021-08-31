@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="30" >
+<title>London Geochronology Centre - Helium Line - Pump and Pyrometer Reader</title>
+<link href="{{ url_for('static',filename='css/text.css') }}" rel="stylesheet" type="text/css">
+<link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+</head>
+<body>
+	  <section class="banner">
+		  <div >
+               <P class="logo">London Geochronology Centre - Pump and Pyrometer Reader Server Status &nbsp CPU {{cputemperature}}&deg;C</P>
+              <p class="breadcrumbtext"><a href = "/" class="breadcrumblink">Return to index</a> &nbsp|&nbsp
+              <a href = "/pylog" class="breadcrumblink">Application Log</a> &nbsp|&nbsp
+              <a href = "/guaccesslog" class="breadcrumblink">Website Access Log</a> &nbsp|&nbsp
+              <a href = "/guerrorlog" class="breadcrumblink">Website Error Log</a> &nbsp|&nbsp
+              <a href = {{ url_for('static',filename='systemhalt.html') }} class="breadcrumblink">Turn off the Raspberry Pi</a></p>
+          </div>
+  </section>
+<section class="container2">
+    <p> Positions</p>
+        <table border = 1px cellspacing = 0>
+            <thead>
+                <td class="tabledataleft"><B>Sensor</B></td>
+                <td class="tabledataleft"><B>Status</B></td>
+            </thead>
+            <tr>
+                    <td class="tabledataleft">Turbo Pump Pressure</td>
+                    <td class="tabledataleft">{{pressures['turbo']}}</td>
+            </tr>
+            <tr>
+                    <td class="tabledataleft">Tank Pressure</td>
+                    <td class="tabledataleft">{{pressures['tank']}}</td>
+            </tr>
+            <tr>
+                    <td class="tabledataleft">Ion Pump Pressure</td>
+                    <td class="tabledataleft">{{pressures['ion']}}</td>
+            </tr>
+            <tr>
+                    <td class="tabledataleft">Pyrometer Temperature</td>
+                    <td class="tabledataleft">{{pressures['temperature']}}</td>
+            </tr>
+            <tr>
+                    <td class="tabledataleft">Pyrometer Laser Rangefinder</td>
+                    <td class="tabledataleft">{{pressures['pyrolaser']}}</td>
+            </tr>
+      </table>
+    <p>&nbsp</p>
+	</section>
+  <section class="banner">
+ <div class ="copyright">&copy;2021 - <strong>London Geochronology Centre</strong></div>
+	  </section>
+</body>
+</html>
