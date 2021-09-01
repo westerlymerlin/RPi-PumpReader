@@ -1,8 +1,6 @@
-PumpReader is an application that runs on a  Raspberry Pi
+Python project to read the Pfeiffer Vacuum gauges and a micro-epsilon infrared pyrometer. 
 
-It uses CH-340 USB to RS232 adapters to communicate to vacuum gauges and pyrometers
-
+It uses CH-340 USB to RS232 adapters. 
 
 The application runs on a Raspberry Pi 4 computer and is controlled via a REST API
-
 
