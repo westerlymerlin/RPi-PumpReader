@@ -1,10 +1,8 @@
-from flask import Flask, render_template, jsonify, request
 import os
-from settings import version, settings
+from flask import Flask, render_template, jsonify, request
 from pumpclass import *
 
-app = Flask(__name__)\
-
+app = Flask(__name__)
 
 
 @app.route('/')
@@ -24,6 +22,9 @@ def api():
             return jsonify(temperature()), 201
         elif item == 'getpressures':
             return jsonify(pressures()), 201
+        elif item == 'resetmax':
+            pyrometer.resetmax()
+            return jsonify(pressures()), 201
         elif item == 'laser':
             if request.json['command'] == "on":
                 pyrometer.laseron()
@@ -34,6 +35,7 @@ def api():
             return "badly formed json message - item not found", 201
     except KeyError:
         return "badly formed json message", 201
+
 
 @app.route('/pylog')
 def showplogs():

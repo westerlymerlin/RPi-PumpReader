@@ -6,9 +6,6 @@ from logmanager import *
 from threading import Timer
 
 
-
-
-
 class PumpClass:
     def __init__(self, config):
         self.port = serial.Serial()
@@ -48,7 +45,7 @@ class PumpClass:
                 self.port.write(self.string2)
             databack = self.port.read(size=100)
             self.value = str(databack, 'utf-8')[self.start:self.length]
-            #print('Pump Return "%s" from %s' % (self.value, self.port.port))
+            # print('Pump Return "%s" from %s' % (self.value, self.port.port))
         else:
             self.value = 0
 
@@ -60,6 +57,7 @@ class PumpClass:
                 return float(self.value)
             except:
                 return 0
+
 
 class PyroClass:
     def __init__(self, config):
@@ -73,12 +71,12 @@ class PyroClass:
         self.port.timeout = 1
         self.value = 0
         self.laser = 0
+        self.maxtemp = 0
         self.portready = 0
         self.readtemp = config['readtemp']
         self.readlaser = config['readlaser']
         self.laser_on = config['laseron']
-        self.laser_off = config['laserof' \
-                              'f']
+        self.laser_off = config['laseroff']
         print('Initialising pump on port %s' % self.port.port)
         try:
             self.port.close()
@@ -101,12 +99,17 @@ class PyroClass:
                 self.laser = 0
             else:
                 self.value = ((databack[0] * 256 + databack[1])-1000)/10
+                if self.maxtemp < self.value:
+                    self.maxtemp = self.value
                 self.port.write(self.readlaser)
                 databack = self.port.read(size=100)
                 self.laser = databack[0]
-            #print('Pump Return "%s" from %s' % (self.value, self.port.port))
+            # print('Pump Return "%s" from %s' % (self.value, self.port.port))
         else:
             self.value = 0
+
+    def resetmax(self):
+        self.maxtemp = 0
 
     def laseron(self):
         if self.portready == 1:
@@ -122,12 +125,11 @@ class PyroClass:
             databack = self.port.read(size=100)
             self.laser = 0
 
+    def readmax(self):
+        return self.maxtemp
 
     def read(self):
-        if self.value == 385.0:
-            return 0.1
-        else:
-            return self.value
+        return self.value
 
 
 def pressures():
@@ -137,7 +139,7 @@ def pressures():
 
 
 def temperature():
-    return {'temperature': pyrometer.read(),'laser':pyrometer.laser}
+    return {'temperature': pyrometer.read(), 'laser': pyrometer.laser, 'maxtemp': pyrometer.readmax()}
 
 
 def httpstatus():
@@ -162,13 +164,16 @@ def httpstatus():
     if pyrometer.portready == 0:
         pyrovalue = 'Port not available'
         pyrolaser = 'Port not available'
+        pyromax = 'Port not available'
     elif pyrometer.value == 0:
         pyrovalue = 'Pyrometer not connected'
         pyrolaser = 'Pyrometer not connected'
+        pyromax = 'Pyrometer not connected'
     else:
         pyrovalue = pyrometer.value
         pyrolaser = pyrometer.laser
-    return {'turbo': turbovalue, 'tank': tankvalue, 'ion': ionvalue, 'temperature': pyrovalue, 'pyrolaser':pyrolaser}
+        pyromax = pyrometer.maxtemp
+    return {'turbo': turbovalue, 'tank': tankvalue, 'ion': ionvalue, 'temperature': pyrovalue, 'pyrolaser': pyrolaser, 'maxtemperature': pyromax}
 
 
 print("pump reader started")
