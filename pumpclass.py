@@ -55,7 +55,7 @@ class PumpClass:
         else:
             try:
                 return float(self.value)
-            finally:
+            except:
                 return 0
 
 
