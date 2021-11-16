@@ -45,7 +45,7 @@ class PumpClass:
                 self.port.write(self.string2)
             databack = self.port.read(size=100)
             self.value = str(databack, 'utf-8')[self.start:self.length]
-            # print('Pump Return "%s" from %s' % (self.value, self.port.port))
+            print('Pump Return "%s" from %s' % (self.value, self.port.port))
         else:
             self.value = 0
 
@@ -55,7 +55,7 @@ class PumpClass:
         else:
             try:
                 return float(self.value)
-            except:
+            finally:
                 return 0
 
 
@@ -93,18 +93,17 @@ class PyroClass:
             timerthread.start()
             self.port.write(self.readtemp)
             databack = self.port.read(size=100)
-            print('Databack=*%s*' % databack)
             if databack == b'':
                 self.value = 0
                 self.laser = 0
             else:
                 self.value = ((databack[0] * 256 + databack[1])-1000)/10
+                print('Pyrometer value = %s' % self.value)
                 if self.maxtemp < self.value:
                     self.maxtemp = self.value
                 self.port.write(self.readlaser)
                 databack = self.port.read(size=100)
                 self.laser = databack[0]
-            # print('Pump Return "%s" from %s' % (self.value, self.port.port))
         else:
             self.value = 0
 
@@ -173,7 +172,8 @@ def httpstatus():
         pyrovalue = pyrometer.value
         pyrolaser = pyrometer.laser
         pyromax = pyrometer.maxtemp
-    return {'turbo': turbovalue, 'tank': tankvalue, 'ion': ionvalue, 'temperature': pyrovalue, 'pyrolaser': pyrolaser, 'maxtemperature': pyromax}
+    return {'turbo': turbovalue, 'tank': tankvalue, 'ion': ionvalue,
+            'temperature': pyrovalue, 'pyrolaser': pyrolaser, 'maxtemperature': pyromax}
 
 
 print("pump reader started")
