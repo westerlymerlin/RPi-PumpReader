@@ -7,7 +7,8 @@ from threading import Timer
 
 
 class PumpClass:
-    def __init__(self, config):
+    def __init__(self, name, config):
+        self.name = name
         self.port = serial.Serial()
         self.port.port = config['port']
         self.port.baudrate = config['speed']
@@ -19,34 +20,39 @@ class PumpClass:
         # self.port.set_buffer_size(4096, 4096)
         self.port.timeout = 1
         self.value = 0
+
         self.portready = 0
         self.string1 = config['string1']
         if len(config) > 5:
             self.string2 = config['string2']
         else:
             self.string2 = None
-        print('Initialising pump on port %s' % self.port.port)
+        print('Initialising %s pump on port %s' % (self.name, self.port.port))
         try:
             self.port.close()
             self.port.open()
-            print("port %s ok" % self.port.port)
+            print("%s port %s ok" % (self.name, self.port.port))
             self.portready = 1
             self.readtimer()
         except serial.serialutil.SerialException:
-            print("pumpClass error opening port %s" % self.port.port)
+            print("pumpClass error %s opening port %s" % (self.name, self.port.port))
 
     def readtimer(self):
-        if self.portready == 1:
-            timerthread = Timer(5, self.readtimer)
-            timerthread.start()
-            self.port.write(self.string1)
-            sleep(0.5)
-            if self.string2:
-                self.port.write(self.string2)
-            databack = self.port.read(size=100)
-            self.value = str(databack, 'utf-8')[self.start:self.length]
-            print('Pump Return "%s" from %s' % (self.value, self.port.port))
-        else:
+        try:
+            if self.portready == 1:
+                timerthread = Timer(5, self.readtimer)
+                timerthread.start()
+                self.port.write(self.string1)
+                sleep(0.5)
+                if self.string2:
+                    self.port.write(self.string2)
+                databack = self.port.read(size=100)
+                self.value = str(databack, 'utf-8')[self.start:self.length]
+                print('Pump Return "%s" from %s' % (self.value, self.name))
+            else:
+                self.value = 0
+        except:
+            print('Pump Error on %s: %s' % (self.name, Exception ))
             self.value = 0
 
     def read(self):
@@ -181,9 +187,9 @@ GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(12, GPIO.OUT)
 GPIO.output(12, 0)
-turbopump = PumpClass(settings['turbo'])
-tankpump = PumpClass(settings['tank'])
-ionpump = PumpClass(settings['ion'])
+turbopump = PumpClass('Turbo Pump', settings['turbo'])
+tankpump = PumpClass('Tank Pump', settings['tank'])
+ionpump = PumpClass('Ipn Pump', settings['ion'])
 pyrometer = PyroClass(settings['pyro'])
 print('Running version %s' % version)
 print("pump reader ready")

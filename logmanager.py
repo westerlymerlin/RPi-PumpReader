@@ -18,7 +18,7 @@ class stdredirector():
 
 logger = logging.getLogger(settings['logging']['logappname'])
 logger.setLevel(logging.INFO)
-LogFile = RotatingFileHandler(settings['logging']['logfilepath'], maxBytes=1048576, backupCount=5)
+LogFile = RotatingFileHandler(settings['logging']['logfilepath'], maxBytes=1048576, backupCount=10)
 formatter = logging.Formatter('%(asctime)s, %(name)s, %(levelname)s : %(message)s')
 LogFile.setFormatter(formatter)
 logger.addHandler(LogFile)

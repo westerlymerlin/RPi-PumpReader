@@ -1,6 +1,6 @@
 import json
 
-version = '1.3.1'
+version = '1.3.2'
 settings = {}
 
 
@@ -16,6 +16,7 @@ def initialise():
     settings['logging']['logappname'] = 'Pumpreader-Py'
     settings['logging']['gunicornpath'] = './logs/'
     settings['logging']['cputemp'] = '/sys/class/thermal/thermal_zone0/temp'
+    settings['logging']['syslog'] = '/var/log/syslog'
     settings['turbo'] = {}
     settings['turbo']['port'] = '/dev/ttyUSB0'
     settings['turbo']['speed'] = 9600
