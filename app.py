@@ -82,7 +82,7 @@ def showgelogs():
 @app.route('/uscHALT')
 def shutdown_the_server():
     os.system('sudo halt')
-    return 'The server is now shutting down, please give it a minute before pulling the power. Cheers G'
+    return 'The server is now shutting down, please give it a minute before pulling the power. \nCheers G'
 
 
 if __name__ == '__main__':

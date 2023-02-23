@@ -13,5 +13,14 @@ It uses CH-340 USB to RS232 adapters for comms.
 
 `README.pdf`		software description and details how to setup on a Raspberry Pi
 
+### JSON Commands
+ 
+`{'getpressures', 1}` Return the pump pressures
 
+`{'gettemperature', 1}` Return the pyrometer temperature and maximum attained temperature
 
+`{'resetmax', 1}` Reset the maximum pyrometer temperature reading
+
+`{'laser', 'off'}` Switch off the rangefinder laser    
+
+`{'laser', 'on'}` Switch on the rangefinder laser   
