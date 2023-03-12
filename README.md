@@ -24,3 +24,6 @@ It uses CH-340 USB to RS232 adapters for comms.
 `{'laser', 'off'}` Switch off the rangefinder laser    
 
 `{'laser', 'on'}` Switch on the rangefinder laser   
+
+`{'restart', 'pi'}` reboot the raspberry pi after 15 second delay   
+

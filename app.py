@@ -32,6 +32,12 @@ def api():
             else:
                 pyrometer.laseroff()
             return jsonify(temperature()), 201
+        elif item == 'restart':
+            if request.json['command'] == 'pi':
+                print('Restart command recieved: system will restart in 15 seconds')
+                timerthread = Timer(15, reboot)
+                timerthread.start()
+                return jsonify(pressures()), 201
         else:
             return "badly formed json message - item not found", 201
     except KeyError:
@@ -84,6 +90,10 @@ def showgelogs():
 def shutdown_the_server():
     os.system('sudo halt')
     return 'The server is now shutting down, please give it a minute before pulling the power. \nCheers G'
+
+def reboot():
+    print('System is restarting now')
+    os.system('sudo reboot')
 
 
 if __name__ == '__main__':
