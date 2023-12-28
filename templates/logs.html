@@ -16,19 +16,16 @@
               <a href = "/pylog" class="breadcrumblink">Application Log</a> &nbsp|&nbsp
               <a href = "/guaccesslog" class="breadcrumblink">Website Access Log</a> &nbsp|&nbsp
               <a href = "/guerrorlog" class="breadcrumblink">Website Error Log</a> &nbsp|&nbsp
-              <a href = {{ url_for('static',filename='systemhalt.html') }} class="breadcrumblink">Turn off the Raspberry Pi</a></p>
+              <a href = "/syslog" class="breadcrumblink">System Log</a></p><br>
           </div>
   </section>
 <section class="container2">
-    <p><b>{{log}}</b><br>
+    <p class="sectiontext">{{log}}<br>
         &nbsp</p>
-
         <p class="tabledataleft">
         {% for row in rows %}
-            {{row}}<br>
-
-         {% endfor %}
-
+            <slot {% if 'ERROR' in row %} class="logerror" {% elif 'WARN' in row %} class="logwarning" {% else %} class="loginfo" {% endif %}>{{row}}</slot><br>
+        {% endfor %}
         &nbsp</p>
 	</section>
   <section class="banner">
