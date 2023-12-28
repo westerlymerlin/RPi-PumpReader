@@ -15,22 +15,23 @@ body {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12pt;
 	background-color: #f2f2f2;
-	margin-top: 0px;
-	margin-right: 0px;
-	margin-bottom: 0px;
-	margin-left: 0px;
+	margin: 10px;
 	font-style: normal;
 	font-weight: 200;
 }
 .gentext {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12pt;
-	margin-top: 0px;
-	margin-right: 0px;
-	margin-bottom: 0px;
-	margin-left: 0px;
+	margin: 0;
 	font-style: normal;
 	font-weight: 200;
+}
+.sectiontext {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14pt;
+	margin: 14px;
+	font-style: normal;
+	font-weight:600;
 }
 /* Container */
 .container {
@@ -42,7 +43,7 @@ body {
 }
 .container2 {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	width: 90%;
+	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
 	background-color: #FFFFFF;
@@ -50,8 +51,7 @@ body {
 .banner {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	background-color: #2D9AB7;
-	height: 90px;
-	width: 90%;
+	width: 100%;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -83,38 +83,80 @@ body {
 /* table Section */
 table {
 	color: #101010;
+	text-align: left;
+	border-collapse: collapse;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #2D9AB7;
 	vertical-align:top;
-	padding-top: 5px;
-	padding-bottom: 5px;
-	padding-left: 10px;
-	padding-right: 10px;
 	min-height: 10px;
-	margin-top: 0px;
-	margin-right: 10px;
-	margin-bottom: 0px;
-	margin-left: 10px;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin: 1px 10px;
 }
 .tabledata {
-	color: #202020;
 	text-align: right;
-	vertical-align:top;
-    min-height: 10px;
-	padding-left: 10px;
-	padding-right: 10px;
-	margin-right: 10px;
-	margin-bottom: 10px;
-}
-.tabledataleft {
-	color: #202020;
-	text-align: left;
+	padding-left: 25px;
+	color: #101010;
+	border-collapse: collapse;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #2D9AB7;
 	vertical-align:top;
 	min-height: 10px;
-	padding-left: 10px;
-	padding-right: 10px;
-	margin-right: 10px;
-	margin-bottom: 10px;
+	padding-right: 5px;
+	margin: 1px 10px;
 }
-
+.tabledataleft {
+	padding-right: 35px;
+	color: #101010;
+	border-collapse: collapse;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #2D9AB7;
+	vertical-align:top;
+	min-height: 10px;
+	padding-left: 5px;
+	margin: 1px 10px;
+}
+.tableimage {
+	padding-right: 0px;
+	color: #101010;
+	border-collapse: collapse;
+	border-style: solid;
+	border-width: 2px;
+	border-color: #2D9AB7;
+	vertical-align:top;
+	min-height: 0px;
+	padding-left: 0px;
+	margin: 0px;
+}
+.logerror {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: bolder;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	color: #c70000;
+}
+.logwarning {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: bolder;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	color: #f69003;
+}
+.loginfo {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	color: #75af02;
+}
 .light {
 	font-weight: bold;
 	color: #717070;
@@ -130,8 +172,8 @@ table {
 .footer_banner {
 	background-color: #B3B3B3;
 	padding-top: 60px;
-	padding-bottom: 60PX;
-	margin-bottom: 0px;
+	padding-bottom: 60px;
+	margin-bottom: 0;
 	background-repeat: repeat;
 }
 .breadcrumbtext{

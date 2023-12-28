@@ -2,18 +2,18 @@ import serial
 from RPi import GPIO
 from time import sleep
 from settings import version, settings
-from logmanager import *
+from logmanager import logger
 from threading import Timer
 
 
 class PumpClass:
-    def __init__(self, name, config):
+    def __init__(self, name, port, speed, start, length, string1, string2=None):
         self.name = name
         self.port = serial.Serial()
-        self.port.port = config['port']
-        self.port.baudrate = config['speed']
-        self.start = config['start']
-        self.length = config['length']
+        self.port.port = port
+        self.port.baudrate = speed
+        self.start = start
+        self.length = length
         self.port.parity = serial.PARITY_NONE
         self.port.stopbits = serial.STOPBITS_ONE
         self.port.bytesize = serial.EIGHTBITS
@@ -22,20 +22,17 @@ class PumpClass:
         self.value = 0
 
         self.portready = 0
-        self.string1 = config['string1']
-        if len(config) > 5:
-            self.string2 = config['string2']
-        else:
-            self.string2 = None
-        print('Initialising %s pump on port %s' % (self.name, self.port.port))
+        self.string1 = string1
+        self.string2 = string2
+        logger.info('Initialising %s pump on port %s' % (self.name, self.port.port))
         try:
             self.port.close()
             self.port.open()
-            print("%s port %s ok" % (self.name, self.port.port))
+            logger.info("%s port %s ok" % (self.name, self.port.port))
             self.portready = 1
             self.readtimer()
         except serial.serialutil.SerialException:
-            print("pumpClass error %s opening port %s" % (self.name, self.port.port))
+            logger.error("pumpClass error %s opening port %s" % (self.name, self.port.port))
 
     def readtimer(self):
         try:
@@ -48,11 +45,11 @@ class PumpClass:
                     self.port.write(self.string2)
                 databack = self.port.read(size=100)
                 self.value = str(databack, 'utf-8')[self.start:self.length]
-                print('Pump Return "%s" from %s' % (self.value, self.name))
+                logger.info('Pump Return "%s" from %s' % (self.value, self.name))
             else:
                 self.value = 0
         except:
-            print('Pump Error on %s: %s' % (self.name, Exception ))
+            logger.error('Pump Error on %s: %s' % (self.name, Exception ))
             self.value = 0
 
     def read(self):
@@ -66,10 +63,10 @@ class PumpClass:
 
 
 class PyroClass:
-    def __init__(self, config):
+    def __init__(self, port, speed, readtemp, readlaser, laseron, laseroff):
         self.port = serial.Serial()
-        self.port.port = config['port']
-        self.port.baudrate = config['speed']
+        self.port.port = port
+        self.port.baudrate = speed
         self.port.parity = serial.PARITY_NONE
         self.port.stopbits = serial.STOPBITS_ONE
         self.port.bytesize = serial.EIGHTBITS
@@ -79,19 +76,19 @@ class PyroClass:
         self.laser = 0
         self.maxtemp = 0
         self.portready = 0
-        self.readtemp = config['readtemp']
-        self.readlaser = config['readlaser']
-        self.laser_on = config['laseron']
-        self.laser_off = config['laseroff']
-        print('Initialising pump on port %s' % self.port.port)
+        self.readtemp = readtemp
+        self.readlaser = readlaser
+        self.laser_on = laseron
+        self.laser_off = laseroff
+        logger.info('Initialising pyrometer on port %s' % self.port.port)
         try:
             self.port.close()
             self.port.open()
-            print("port %s ok" % self.port.port)
+            logger.info("pyrometer port %s ok" % self.port.port)
             self.portready = 1
             self.readtimer()
         except serial.serialutil.SerialException:
-            print("pumpClass error opening port %s" % self.port.port)
+            logger.error("PyroClass error opening port %s" % self.port.port)
 
     def readtimer(self):
         if self.portready == 1:
@@ -104,7 +101,7 @@ class PyroClass:
                 self.laser = 0
             else:
                 self.value = ((databack[0] * 256 + databack[1])-1000)/10
-                print('Pyrometer value = %s' % self.value)
+                logger.info('Pyrometer value = %s' % self.value)
                 if self.maxtemp < self.value:
                     self.maxtemp = self.value
                 self.port.write(self.readlaser)
@@ -182,15 +179,19 @@ def httpstatus():
             'temperature': pyrovalue, 'pyrolaser': pyrolaser, 'maxtemperature': pyromax}
 
 
-print("pump reader started")
+logger.info("pump reader started")
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(12, GPIO.OUT)
 GPIO.output(12, 0)
-turbopump = PumpClass('Turbo Pump', settings['turbo'])
-tankpump = PumpClass('Tank Pump', settings['tank'])
-ionpump = PumpClass('Ipn Pump', settings['ion'])
-pyrometer = PyroClass(settings['pyro'])
-print('Running version %s' % version)
-print("pump reader ready")
+turbopump = PumpClass('Turbo Pump', settings['turbo-port'], settings['turbo-speed'], settings['turbo-start'],
+                      settings['turbo-length'], settings['turbo-string1'], settings['turbo-string2'])
+tankpump = PumpClass('Tank Pump', settings['tank-port'], settings['tank-speed'], settings['tank-start'],
+                      settings['tank-length'], settings['tank-string1'], settings['tank-string2'])
+ionpump = PumpClass('Ion Pump', settings['ion-port'], settings['ion-speed'], settings['ion-start'],
+                      settings['ion-length'], settings['ion-string1'])
+pyrometer = PyroClass(settings['pyro-port'], settings['pyro-speed'],settings['pyro-readtemp'],
+                      settings['pyro-readlaser'],settings['pyro-laseron'], settings['pyro-laseroff'])
+logger.info('Running version %s' % version)
+logger.info("Pump reader ready")
 GPIO.output(12, 1)  # Set ready LED
