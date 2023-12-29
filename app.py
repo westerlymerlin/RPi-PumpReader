@@ -1,9 +1,10 @@
+import os
+import subprocess
 from flask import Flask, render_template, jsonify, request
 from pumpclass import *
 from logmanager import  logger
 from settings import version
-import os
-import subprocess
+
 
 
 app = Flask(__name__)

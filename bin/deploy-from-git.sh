@@ -21,7 +21,7 @@ elif [ $LOCAL = $BASE ]; then
     sudo systemctl stop gunicorn.service
     echo -e "\033[0;33m **** gunicorn and python stopped **** \033[0m"
     echo -e "\033[0;33m **** copying files from cloned github repo **** \033[0m"
-    cp -r ~/github/UCL-tombola/*  ~/
+    cp -r ~/github/~/github/UCL-RPi-ValveController/*  ~/
     echo -e "\033[0;33m **** all files copied **** \033[0m"
     echo -e "\033[0;33m **** setting flags on bin folder **** \033[0m"
     chmod 755 ~/bin/*.sh
