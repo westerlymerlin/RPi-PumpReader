@@ -1,7 +1,7 @@
-from settings import settings
+import os
 import logging
 from logging.handlers import RotatingFileHandler
-import os
+from settings import settings
 
 # Ensure log directory exists
 log_dir = os.path.dirname(settings['logfilepath'])

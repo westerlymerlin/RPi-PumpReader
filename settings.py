@@ -2,7 +2,7 @@ import json
 from datetime import datetime
 import base64
 
-version = '2.0.0'
+version = '2.0.1'
 
 
 def json_encoder(byte_obj):

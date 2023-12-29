@@ -1,9 +1,10 @@
 import serial
-from RPi import GPIO
 from time import sleep
+from threading import Timer
+from RPi import GPIO
 from settings import version, settings
 from logmanager import logger
-from threading import Timer
+
 
 
 class PumpClass:
