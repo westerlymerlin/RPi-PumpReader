@@ -1,6 +1,10 @@
-name: Pylint
+name: Code checks and merge to the master branch
 
-on: [push]
+on:
+  push:
+    branches:
+      - '**'
+      - '!master'
 
 jobs:
   build:
@@ -19,6 +23,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install pylint
         pip install -r requirements.txt
-    - name: Analysing the code with pylint
+    - name: Analysing the code with pylint (pass score = 9/10)
       run: |
-        pylint --disable=C --disable=R --disable=W1201 --disable=E1101 $(git ls-files '*.py')
+        pylint $(git ls-files '*.py')
+    - name: Create PR Release to main
+      run: gh pr create --title "Auto PR from github action" --body "Static code analysis (pylint > 9/10) has completed"
+      env:
+        GH_TOKEN: ${{ secrets.ACTIONSECRET }}
+
