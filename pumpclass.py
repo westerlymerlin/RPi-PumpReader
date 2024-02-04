@@ -6,7 +6,7 @@ from threading import Timer
 from base64 import b64decode
 import serial  # from pyserial
 from RPi import GPIO
-from settings import VERSION, settings
+from settings import settings
 from logmanager import logger
 
 
@@ -211,6 +211,5 @@ ionpump = PumpClass('Ion Pump', settings['ion-port'], settings['ion-speed'], set
                       settings['ion-length'], settings['ion-string1'])
 pyrometer = PyroClass(settings['pyro-port'], settings['pyro-speed'],settings['pyro-readtemp'],
                       settings['pyro-readlaser'],settings['pyro-laseron'], settings['pyro-laseroff'])
-logger.info('Running version %s', VERSION)
 logger.info("Pump reader ready")
 GPIO.output(12, 1)  # Set ready LED
