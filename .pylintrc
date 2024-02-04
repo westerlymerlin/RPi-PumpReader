@@ -288,7 +288,7 @@ ignored-parents=
 max-args=10
 
 # Maximum number of attributes for a class (see R0902).
-max-attributes=7
+max-attributes=12
 
 # Maximum number of boolean expressions in an if statement (see R0916).
 max-bool-expr=5
@@ -421,13 +421,13 @@ confidence=HIGH,
 # --enable=similarities". If you want to run only the classes checker, but have
 # no Warning level messages displayed, use "--disable=all --enable=classes
 # --disable=W".
-disable=bare-except,
-        R0902,
-        C0201,
-        C0209,
-        W0602,
-        W0612,
-        R1732
+disable=C0209,  # consider-using-f-string
+        C0201,  # consider-iterating-dictionary
+        E1101,  # no-member
+        R1732,  # consider-using-with
+        W0602,  # global-variable-not-assigned
+        W0603,  # global-statement
+        W0702,  # bare-except
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option

@@ -21,7 +21,11 @@ Usage:\n
 **logger.error('message')** for errors
 """
 
-logger.setLevel(logging.INFO)
+if settings['loglevel'].upper() == 'DEBUG':
+    logger.setLevel(logging.DEBUG)
+else:
+    logger.setLevel(logging.INFO)
+
 LogFile = RotatingFileHandler(settings['logfilepath'], maxBytes=1048576, backupCount=10)
 formatter = logging.Formatter('%(asctime)s, %(name)s, %(levelname)s : %(message)s')
 LogFile.setFormatter(formatter)

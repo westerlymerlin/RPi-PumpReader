@@ -2,10 +2,11 @@
 Settings module, reads the settings from a settings.json file. If it does not exist or a new setting
 has appeared it will creat from the defaults in the initialise function.
 """
+import random
 import json
 from datetime import datetime
 
-VERSION = '2.0.3'
+VERSION = '2.0.5'
 
 
 def writesettings():
@@ -14,10 +15,15 @@ def writesettings():
     with open('settings.json', 'w', encoding='utf-8') as outfile:
         json.dump(settings, outfile, indent=4, sort_keys=True)
 
+def generate_api_key(key_len):
+    """generate a new api key"""
+    allowed_characters = "ABCDEFGHJKLMNPQRSTUVWXYZ-+~abcdefghijkmnopqrstuvwxyz123456789"
+    return ''.join(random.choice(allowed_characters) for _ in range(key_len))
 
 def initialise():
     """These are the default values written to the settings.json file the first time the app is run"""
     isettings = {'LastSave': '01/01/2000 00:00:01',
+                 'api-key': 'change-me',
                  'cputemp': '/sys/class/thermal/thermal_zone0/temp',
                  'gunicornpath': './logs/',
                  'ion-length': 16,
@@ -27,6 +33,7 @@ def initialise():
                  'ion-string1': 'fiAwNSAwQiAwMA0=',  # base64 encoded
                  'logappname': 'Pumpreader-Py',
                  'logfilepath': './logs/pumpreader.log',
+                 'loglevel': 'INFO',
                  'pyro-laseroff': 'pQCl',  # base64 encoded
                  'pyro-laseron': 'pQGk',  # base64 encoded
                  'pyro-port': '/dev/ttyUSB3',
@@ -61,15 +68,18 @@ def readsettings():
 def loadsettings():
     """Replace the default settings with thsoe from the json files"""
     global settings
-    settingschanged = 0
+    settingschanged = False
     fsettings = readsettings()
     for item in settings.keys():
         try:
             settings[item] = fsettings[item]
         except KeyError:
-            print('settings[%s] Not found in json file using default', item)
-            settingschanged = 1
-    if settingschanged == 1:
+            print('settings[%s] Not found in json file using default' % item)
+            settingschanged = True
+    if settings['api-key'] == 'change-me':
+        settings['api-key'] = generate_api_key(30)
+        settingschanged = True
+    if settingschanged:
         writesettings()
 
 
