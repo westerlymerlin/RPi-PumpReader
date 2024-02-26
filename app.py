@@ -43,7 +43,7 @@ def api():
         logger.debug('API headers: %s', request.headers)
         logger.debug('API request: %s', request.json)
         if 'Api-Key' in request.headers.keys():  # check api key exists
-            if request.headers['api-key'] == settings['api-key']:  # check for correct API key
+            if request.headers['Api-Key'] == settings['api-key']:  # check for correct API key
                 item = request.json['item']
                 if item == 'gettemperature':
                     return jsonify(temperature()), 201
