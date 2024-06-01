@@ -51,7 +51,15 @@ def initialise():
                  'turbo-speed': 9600,
                  'turbo-start': 5,
                  'turbo-string1': 'UFIxDQ==',  # base64 encoded
-                 'turbo-string2': 'BQ=='  # base64 encoded
+                 'turbo-string2': 'BQ==',  # base64 encoded
+                 'pressure-vendorid': 0x04D8,
+                 'pressure-productid': 0x00DD,
+                 'pressure-env': 'BLINKA_MCP2221',
+                 'pressure-units': 'bar',
+                 'pressure-min-units': 0,
+                 'pressure-min-volt': 0.5,
+                 'pressure-max-units': 13.8,
+                 'pressure-max-volt': 4.5
                  }
     return isettings
 
