@@ -5,9 +5,9 @@ import os
 import subprocess
 from threading import Timer
 from flask import Flask, render_template, jsonify, request
-from pumpclass import httpstatus, temperature, pressures, pyrometer
+from pumpclass import httpstatus, pressures
 from logmanager import  logger
-from settings import settings, VERSION
+from app_control import settings, VERSION
 
 
 app = Flask(__name__)
@@ -45,19 +45,8 @@ def api():
         if 'Api-Key' in request.headers.keys():  # check api key exists
             if request.headers['Api-Key'] == settings['api-key']:  # check for correct API key
                 item = request.json['item']
-                if item == 'gettemperature':
-                    return jsonify(temperature()), 201
                 if item == 'getpressures':
                     return jsonify(pressures()), 201
-                if item == 'resetmax':
-                    pyrometer.resetmax()
-                    return jsonify(pressures()), 201
-                if item == 'laser':
-                    if request.json['command'] == "on":
-                        pyrometer.laseron()
-                    else:
-                        pyrometer.laseroff()
-                    return jsonify(temperature()), 201
                 if item == 'restart':
                     if request.json['command'] == 'pi':
                         logger.info('Restart command recieved: system will restart in 15 seconds')
