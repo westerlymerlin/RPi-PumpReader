@@ -6,7 +6,7 @@ import random
 import json
 from datetime import datetime
 
-VERSION = '2.1.0'
+VERSION = '2.1.1'
 
 
 def writesettings():
@@ -31,31 +31,28 @@ def initialise():
                  'ion-speed': 9600,
                  'ion-start': 9,
                  'ion-string1': 'fiAwNSAwQiAwMA0=',  # base64 encoded
+                 'ion-units': 'mBar',
                  'logappname': 'Pumpreader-Py',
                  'logfilepath': './logs/pumpreader.log',
                  'loglevel': 'INFO',
-                 'pyro-laseroff': 'pQCl',  # base64 encoded
-                 'pyro-laseron': 'pQGk',  # base64 encoded
-                 'pyro-port': '/dev/ttyUSB3',
-                 'pyro-speed': 115200,
-                 'pyro-readlaser': 'JQ==',  # base64 encoded
-                 'pyro-readtemp': 'AQ==',  # base64 encoded
                  'tank-length': 16,
                  'tank-port': '/dev/ttyUSB1',
                  'tank-speed': 9600,
                  'tank-start': 5,
                  'tank-string1': 'UFIxDQ==',  # base64 encoded
                  'tank-string2': 'BQ==',  # base64 encoded
+                 'tank-units': 'mBar',
                  'turbo-length': 16,
                  'turbo-port': '/dev/ttyUSB0',
                  'turbo-speed': 9600,
                  'turbo-start': 5,
                  'turbo-string1': 'UFIxDQ==',  # base64 encoded
                  'turbo-string2': 'BQ==',  # base64 encoded
+                 'turbo-units': 'mBar',
                  'pressure-vendorid': 0x04D8,
                  'pressure-productid': 0x00DD,
                  'pressure-env': 'BLINKA_MCP2221',
-                 'pressure-units': 'bar',
+                 'pressure-units': 'Bar',
                  'pressure-min-units': 0,
                  'pressure-min-volt': 0.5,
                  'pressure-max-units': 13.8,

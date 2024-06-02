@@ -101,8 +101,10 @@ class PressureClass:
 
 def pressures():
     """API call: return all guage pressures as a json message"""
-    pressure = [{'pump': 'turbo', 'pressure': turbopump.read()}, {'pump': 'tank', 'pressure': tankpump.read()},
-                {'pump': 'ion', 'pressure': ionpump.read()}, {'pump': 'gas', 'pressure': gaspressure.read()},]
+    pressure = [{'pump': 'turbo', 'pressure': turbopump.read(), 'units': settings['turbo-units']},
+                {'pump': 'tank', 'pressure': tankpump.read(), 'units': settings['tank-units']},
+                {'pump': 'ion', 'pressure': ionpump.read(), 'units': settings['ion-units']},
+                {'pump': 'gas', 'pressure': gaspressure.read(), 'units': settings['pressure-units']}]
     return pressure
 
 
