@@ -6,13 +6,14 @@ import subprocess
 from threading import Timer
 from flask import Flask, render_template, jsonify, request
 from pumpclass import httpstatus, pressures
-from logmanager import  logger
+from logmanager import logger
 from app_control import settings, VERSION
 
 
 app = Flask(__name__)
 logger.info('Starting Pump Reader web app version %s', VERSION)
 logger.info('Api-Key = %s', settings['api-key'])
+
 
 def get_cpu_temperature():
     """Read CPU temperature"""
@@ -71,6 +72,7 @@ def showplogs():
     return render_template('logs.html', rows=logs, log='Pump Reader Application Log',
                            cputemperature=cputemperature, version=VERSION)
 
+
 @app.route('/guaccesslog')
 def showgalogs():
     """Displays the Gunicorn access log file via the logs.html template"""
@@ -78,6 +80,7 @@ def showgalogs():
     logs = get_log_data(settings['gunicornpath'] + 'gunicorn-access.log')
     return render_template('logs.html', rows=logs, log='gunicorn access log',
                            cputemperature=cputemperature, version=VERSION)
+
 
 @app.route('/guerrorlog')
 def showgelogs():

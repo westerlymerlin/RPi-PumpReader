@@ -12,7 +12,6 @@ from app_control import settings
 from logmanager import logger
 
 
-
 class PumpClass:
     """PumpClass: reads pressures from gauges via RS232 ports"""
     def __init__(self, name, port, speed, start, length, string1, string2=None):
@@ -60,7 +59,7 @@ class PumpClass:
             else:
                 self.value = 0
         except:
-            logger.error('Pump Error on %s: %s' ,self.name, Exception )
+            logger.error('Pump Error on %s: %s', self.name, Exception)
             self.value = 0
 
     def read(self):
@@ -86,7 +85,7 @@ class PressureClass:
     def read(self):
         """Read the pressure from the MCP2221 chip"""
         if self.conroller is not None:
-            raw= self.adc.value
+            raw = self.adc.value
             volts = (raw * 5.174) / 65536
             if volts <= settings['pressure-min-volt']:
                 return settings['pressure-min-units']
@@ -96,7 +95,6 @@ class PressureClass:
                              (settings['pressure-max-volt'] - settings['pressure-min-volt']))
             return (volts - settings['pressure-min-volt']) * presurescaler
         return -1
-
 
 
 def pressures():
@@ -132,24 +130,22 @@ def httpstatus():
         gasvalue = 'Reader not connected'
     else:
         gasvalue = '%.2f' % gaspressure.read()
-    return {'turbo': turbovalue, 'tank': tankvalue, 'ion': ionvalue, 'gas': gasvalue, 'gasunits': settings['pressure-units']}
-
-
-
-
+    return {'turbo': turbovalue, 'turbounits': settings['turbo-units'], 'tank': tankvalue,
+            'tankunits': settings['tank-units'], 'ion': ionvalue, 'ionunits': settings['ion-units'],
+            'gas': gasvalue, 'gasunits': settings['pressure-units']}
 
 
 logger.info("pump reader started")
 os.environ[settings['pressure-env']] = "1"  # set an environment variable for the board we are using
 device = hid.enumerate(settings['pressure-vendorid'], settings['pressure-productid'])
-if device == []:
+if not device:
     logger.error('Gas Pressure Reader not connected')
     CONTROLLER = None
 else:
     os.environ["BLINKA_MCP2221"] = "1"  # set an environment variable for the board we are using
     import board
     from analogio import AnalogIn
-    CONTROLLER= board.board_id
+    CONTROLLER = board.board_id
     logger.info('Pressure reader device is %s', CONTROLLER)
 
 GPIO.setwarnings(False)
@@ -159,9 +155,9 @@ GPIO.output(12, 0)
 turbopump = PumpClass('Turbo Pump', settings['turbo-port'], settings['turbo-speed'], settings['turbo-start'],
                       settings['turbo-length'], settings['turbo-string1'], settings['turbo-string2'])
 tankpump = PumpClass('Tank Pump', settings['tank-port'], settings['tank-speed'], settings['tank-start'],
-                      settings['tank-length'], settings['tank-string1'], settings['tank-string2'])
+                     settings['tank-length'], settings['tank-string1'], settings['tank-string2'])
 ionpump = PumpClass('Ion Pump', settings['ion-port'], settings['ion-speed'], settings['ion-start'],
-                      settings['ion-length'], settings['ion-string1'])
+                    settings['ion-length'], settings['ion-string1'])
 gaspressure = PressureClass(CONTROLLER)
 logger.info("Pump reader ready")
 GPIO.output(12, 1)  # Set ready LED
