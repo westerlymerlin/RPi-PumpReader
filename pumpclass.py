@@ -87,13 +87,14 @@ class PressureClass:
         if self.conroller is not None:
             raw = self.adc.value
             volts = (raw * 5.174) / 65536
+            print('voltage is', volts)
             if volts <= settings['pressure-min-volt']:
                 return settings['pressure-min-units']
             if volts >= settings['pressure-max-volt']:
                 return settings['pressure-max-units']
             presurescaler = ((settings['pressure-max-units'] - settings['pressure-min-units']) /
                              (settings['pressure-max-volt'] - settings['pressure-min-volt']))
-            return (volts - settings['pressure-min-volt']) * presurescaler
+            return ((volts - settings['pressure-min-volt']) * presurescaler) + settings['pressure-min-units']
         return -1
 
 

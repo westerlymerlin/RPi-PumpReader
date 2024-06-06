@@ -53,7 +53,7 @@ def initialise():
                  'pressure-productid': 0x00DD,
                  'pressure-env': 'BLINKA_MCP2221',
                  'pressure-units': 'Bar',
-                 'pressure-min-units': 0,
+                 'pressure-min-units': 1,
                  'pressure-min-volt': 0.5,
                  'pressure-max-units': 13.8,
                  'pressure-max-volt': 4.5
