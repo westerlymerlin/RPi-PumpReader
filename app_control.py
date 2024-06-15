@@ -31,7 +31,7 @@ def initialise():
                  'ion-speed': 9600,
                  'ion-start': 9,
                  'ion-string1': 'fiAwNSAwQiAwMA0=',  # base64 encoded
-                 'ion-units': 'mBar',
+                 'ion-units': 'mbar',
                  'logappname': 'Pumpreader-Py',
                  'logfilepath': './logs/pumpreader.log',
                  'loglevel': 'INFO',
@@ -41,18 +41,18 @@ def initialise():
                  'tank-start': 5,
                  'tank-string1': 'UFIxDQ==',  # base64 encoded
                  'tank-string2': 'BQ==',  # base64 encoded
-                 'tank-units': 'mBar',
+                 'tank-units': 'mbar',
                  'turbo-length': 16,
                  'turbo-port': '/dev/ttyUSB0',
                  'turbo-speed': 9600,
                  'turbo-start': 5,
                  'turbo-string1': 'UFIxDQ==',  # base64 encoded
                  'turbo-string2': 'BQ==',  # base64 encoded
-                 'turbo-units': 'mBar',
+                 'turbo-units': 'mbar',
                  'pressure-vendorid': 0x04D8,
                  'pressure-productid': 0x00DD,
                  'pressure-env': 'BLINKA_MCP2221',
-                 'pressure-units': 'Bar',
+                 'pressure-units': 'bar',
                  'pressure-min-units': 1,
                  'pressure-min-volt': 0.5,
                  'pressure-max-units': 13.8,
