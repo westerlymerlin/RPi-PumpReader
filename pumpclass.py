@@ -95,7 +95,7 @@ class PressureClass:
             presurescaler = ((settings['pressure-max-units'] - settings['pressure-min-units']) /
                              (settings['pressure-max-volt'] - settings['pressure-min-volt']))
             return ((volts - settings['pressure-min-volt']) * presurescaler) + settings['pressure-min-units']
-        return -1
+        return 1000
 
 
 def pressures():
@@ -127,7 +127,7 @@ def httpstatus():
         ionvalue = 'Pump not connected'
     else:
         ionvalue = ionpump.value
-    if gaspressure.read() == -1:
+    if gaspressure.read() == 1000:
         gasvalue = 'Reader not connected'
     else:
         gasvalue = '%.2f' % gaspressure.read()
