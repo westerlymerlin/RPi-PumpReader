@@ -98,6 +98,7 @@ class PressureClass:
             presurescaler = ((settings['pressure-max-units'] - settings['pressure-min-units']) /
                              (settings['pressure-max-volt'] - settings['pressure-min-volt']))
             self.value = ((volts - settings['pressure-min-volt']) * presurescaler) + settings['pressure-min-units']
+            self.value = round(self.value * 4, 0) / 4
         else:
             self.value = 1000
 
