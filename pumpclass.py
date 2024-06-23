@@ -82,6 +82,7 @@ class PressureClass:
         else:
             self.adc = None
         self.readtimer()
+
     def readtimer(self):
         """regular timer, reads the gauge every 5 seconds"""
         timerthread = Timer(5, self.readtimer)
@@ -91,15 +92,14 @@ class PressureClass:
             volts = (raw * 5.174) / 65536
             logger.debug('voltage is %s', volts)
             if volts <= settings['pressure-min-volt']:
-                self.value =  settings['pressure-min-units']
+                self.value = settings['pressure-min-units']
             if volts >= settings['pressure-max-volt']:
-                self.value =  settings['pressure-max-units']
+                self.value = settings['pressure-max-units']
             presurescaler = ((settings['pressure-max-units'] - settings['pressure-min-units']) /
                              (settings['pressure-max-volt'] - settings['pressure-min-volt']))
             self.value = ((volts - settings['pressure-min-volt']) * presurescaler) + settings['pressure-min-units']
         else:
             self.value = 1000
-
 
     def read(self):
         """Read the pressure from the MCP2221 chip"""
