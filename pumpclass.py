@@ -55,7 +55,7 @@ class PumpClass:
                     self.port.write(self.string2)
                 databack = self.port.read(size=100)
                 self.value = str(databack, 'utf-8')[self.start:self.length]
-                logger.info('Pump Return "%s" from %s', self.value, self.name)
+                logger.debug('Pump Return "%s" from %s', self.value, self.name)
             else:
                 self.value = 0
         except:
@@ -76,26 +76,34 @@ class PressureClass:
     """PressureClass: reads pressures from pressure transducer"""
     def __init__(self, name):
         self.conroller = name
+        self.value = 0
         if self.conroller is not None:
             self.adc = AnalogIn(board.G1)
         else:
-
             self.adc = None
-
-    def read(self):
-        """Read the pressure from the MCP2221 chip"""
+        self.readtimer()
+    def readtimer(self):
+        """regular timer, reads the gauge every 5 seconds"""
+        timerthread = Timer(5, self.readtimer)
+        timerthread.start()
         if self.conroller is not None:
             raw = self.adc.value
             volts = (raw * 5.174) / 65536
-            print('voltage is', volts)
+            logger.debug('voltage is %s', volts)
             if volts <= settings['pressure-min-volt']:
                 return settings['pressure-min-units']
             if volts >= settings['pressure-max-volt']:
                 return settings['pressure-max-units']
             presurescaler = ((settings['pressure-max-units'] - settings['pressure-min-units']) /
                              (settings['pressure-max-volt'] - settings['pressure-min-volt']))
-            return ((volts - settings['pressure-min-volt']) * presurescaler) + settings['pressure-min-units']
-        return 1000
+            self.value = ((volts - settings['pressure-min-volt']) * presurescaler) + settings['pressure-min-units']
+        else:
+            self.value = 1000
+
+
+    def read(self):
+        """Read the pressure from the MCP2221 chip"""
+        return self.value
 
 
 def pressures():
