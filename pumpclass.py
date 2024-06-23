@@ -91,9 +91,9 @@ class PressureClass:
             volts = (raw * 5.174) / 65536
             logger.debug('voltage is %s', volts)
             if volts <= settings['pressure-min-volt']:
-                return settings['pressure-min-units']
+                self.value =  settings['pressure-min-units']
             if volts >= settings['pressure-max-volt']:
-                return settings['pressure-max-units']
+                self.value =  settings['pressure-max-units']
             presurescaler = ((settings['pressure-max-units'] - settings['pressure-min-units']) /
                              (settings['pressure-max-volt'] - settings['pressure-min-volt']))
             self.value = ((volts - settings['pressure-min-volt']) * presurescaler) + settings['pressure-min-units']
