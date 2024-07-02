@@ -59,7 +59,7 @@ class PumpClass:
             else:
                 self.value = 0
         except:
-            logger.error('Pump Error on %s: %s', self.name, Exception)
+            logger.exception('Pump Error on %s: %s', self.name, Exception)
             self.value = 0
 
     def read(self):
