@@ -43,12 +43,16 @@ class PumpClass:
         except serial.serialutil.SerialException:
             logger.error("pumpClass error %s opening port %s", self.name, self.port.port)
 
+
     def readtimer(self):
         """regular timer, reads the gauges every 5 seconds"""
+        self.serialreader()
+        timerthread = Timer(5, self.readtimer)
+        timerthread.start()
+
+    def serialreader(self):
         try:
             if self.portready == 1:
-                timerthread = Timer(5, self.readtimer)
-                timerthread.start()
                 self.port.write(self.string1)
                 sleep(0.5)
                 if self.string2:
@@ -61,6 +65,8 @@ class PumpClass:
         except:
             logger.exception('Pump Error on %s: %s', self.name, Exception)
             self.value = 0
+
+
 
     def read(self):
         """Return the gauge pressure"""
