@@ -48,9 +48,11 @@ class PumpClass:
         """regular timer, reads the gauges every 5 seconds"""
         self.serialreader()
         timerthread = Timer(5, self.readtimer)
+        timerthread.name = self.name
         timerthread.start()
 
     def serialreader(self):
+        """Reads the serial port"""
         try:
             if self.portready == 1:
                 self.port.write(self.string1)
@@ -92,6 +94,7 @@ class PressureClass:
     def readtimer(self):
         """regular timer, reads the gauge every 5 seconds"""
         timerthread = Timer(5, self.readtimer)
+        timerthread.name = 'gauge'
         timerthread.start()
         if self.conroller is not None:
             raw = self.adc.value

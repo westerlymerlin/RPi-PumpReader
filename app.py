@@ -3,7 +3,7 @@ This is the main flask application - called by Gunicorn
 """
 import os
 import subprocess
-from threading import Timer, active_count
+from threading import Timer, enumerate as enumerate_threads
 from flask import Flask, render_template, jsonify, request
 from pumpclass import httpstatus, pressures
 from logmanager import logger
@@ -34,7 +34,7 @@ def index():
     """Main web page handler, shows status page via the index.html template"""
     cputemperature = get_cpu_temperature()
     return render_template('index.html', pressures=httpstatus(), cputemperature=cputemperature,
-                           version=VERSION, threadcount=active_count())
+                           version=VERSION, threadcount=enumerate_threads())
 
 
 @app.route('/api', methods=['POST'])
