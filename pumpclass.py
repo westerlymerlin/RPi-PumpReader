@@ -39,36 +39,30 @@ class PumpClass:
             self.port.open()
             logger.info("%s port %s ok", self.name, self.port.port)
             self.portready = 1
-            self.readtimer()
+            timerthread = Timer(1, self.serialreader)
+            timerthread.name = self.name
+            timerthread.start()
         except serial.serialutil.SerialException:
             logger.error("pumpClass error %s opening port %s", self.name, self.port.port)
 
-
-    def readtimer(self):
-        """regular timer, reads the gauges every 5 seconds"""
-        self.serialreader()
-        timerthread = Timer(5, self.readtimer)
-        timerthread.name = self.name
-        timerthread.start()
-
     def serialreader(self):
         """Reads the serial port"""
-        try:
-            if self.portready == 1:
-                self.port.write(self.string1)
-                sleep(0.5)
-                if self.string2:
-                    self.port.write(self.string2)
-                databack = self.port.read(size=100)
-                self.value = str(databack, 'utf-8')[self.start:self.length]
-                logger.debug('Pump Return "%s" from %s', self.value, self.name)
-            else:
+        while True:
+            try:
+                if self.portready == 1:
+                    self.port.write(self.string1)
+                    sleep(0.5)
+                    if self.string2:
+                        self.port.write(self.string2)
+                    databack = self.port.read(size=100)
+                    self.value = str(databack, 'utf-8')[self.start:self.length]
+                    logger.debug('Pump Return "%s" from %s', self.value, self.name)
+                else:
+                    self.value = 0
+            except:
+                logger.exception('Pump Error on %s: %s', self.name, Exception)
                 self.value = 0
-        except:
-            logger.exception('Pump Error on %s: %s', self.name, Exception)
-            self.value = 0
-
-
+            sleep(5)
 
     def read(self):
         """Return the gauge pressure"""
@@ -89,30 +83,31 @@ class PressureClass:
             self.adc = AnalogIn(board.G1)
         else:
             self.adc = None
-        self.readtimer()
-
-    def readtimer(self):
-        """regular timer, reads the gauge every 5 seconds"""
-        timerthread = Timer(5, self.readtimer)
-        timerthread.name = 'gauge'
+        timerthread = Timer(1, self.read_adc)
+        timerthread.name = 'Pressure Gauge'
         timerthread.start()
-        if self.conroller is not None:
-            raw = self.adc.value
-            volts = (raw * 5.174) / 65536
-            logger.debug('voltage is %s', volts)
-            if volts <= settings['pressure-min-volt']:
-                self.value = settings['pressure-min-units']
-            if volts >= settings['pressure-max-volt']:
-                self.value = settings['pressure-max-units']
-            presurescaler = ((settings['pressure-max-units'] - settings['pressure-min-units']) /
-                             (settings['pressure-max-volt'] - settings['pressure-min-volt']))
-            self.value = ((volts - settings['pressure-min-volt']) * presurescaler) + settings['pressure-min-units']
-            self.value = round(self.value * 4, 0) / 4
-        else:
-            self.value = 1000
+
+    def read_adc(self):
+        """regular reader, reads the gauge every 5 seconds"""
+        while True:
+            if self.conroller is not None:
+                raw = self.adc.value
+                volts = (raw * 5.174) / 65536
+                logger.debug('voltage is %s', volts)
+                if volts <= settings['pressure-min-volt']:
+                    self.value = settings['pressure-min-units']
+                if volts >= settings['pressure-max-volt']:
+                    self.value = settings['pressure-max-units']
+                presurescaler = ((settings['pressure-max-units'] - settings['pressure-min-units']) /
+                                 (settings['pressure-max-volt'] - settings['pressure-min-volt']))
+                self.value = ((volts - settings['pressure-min-volt']) * presurescaler) + settings['pressure-min-units']
+                self.value = round(self.value * 4, 0) / 4
+            else:
+                self.value = 1000
+            sleep(5)
 
     def read(self):
-        """Read the pressure from the MCP2221 chip"""
+        """Return the pressure from the MCP2221 chip"""
         return self.value
 
 
