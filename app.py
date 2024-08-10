@@ -22,6 +22,13 @@ def get_cpu_temperature():
     return round(float(log)/1000, 1)
 
 
+def threadlister():
+    appthreads =[]
+    for appthread in enumerate_threads():
+        appthreads.append([appthread.name, appthread.native_id])
+    return appthreads
+
+
 def get_log_data(file_path):
     """Reads a file's lines and returns them in reverse order"""
     with open(file_path, 'r', encoding='utf-8') as f:
@@ -34,7 +41,7 @@ def index():
     """Main web page handler, shows status page via the index.html template"""
     cputemperature = get_cpu_temperature()
     return render_template('index.html', pressures=httpstatus(), cputemperature=cputemperature,
-                           version=VERSION, threadcount=enumerate_threads())
+                           version=VERSION, threadcount=threadlister())
 
 
 @app.route('/api', methods=['POST'])

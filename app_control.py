@@ -6,7 +6,7 @@ import random
 import json
 from datetime import datetime
 
-VERSION = '2.2.9'
+VERSION = '2.2.10'
 
 
 def writesettings():

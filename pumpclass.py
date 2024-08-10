@@ -84,7 +84,7 @@ class PressureClass:
         else:
             self.adc = None
         timerthread = Timer(1, self.read_adc)
-        timerthread.name = 'Pressure Gauge'
+        timerthread.name = 'N2 Reader'
         timerthread.start()
 
     def read_adc(self):
