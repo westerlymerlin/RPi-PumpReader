@@ -1,5 +1,6 @@
 flask
-rpi.gpio
+rpi.lgpio
 pyserial
 hidapi
 adafruit-circuitpython-lis3dh
+gunicorn

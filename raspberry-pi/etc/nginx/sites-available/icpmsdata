@@ -3,7 +3,7 @@ server {
 	listen [::]:80;
 
     root /var/www/html;
-    server_name pizero.local;
+    server_name pumpreader.local;
     
 	location /static {
         alias /home/pi/static;}

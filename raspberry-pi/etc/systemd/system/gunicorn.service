@@ -1,14 +1,15 @@
 [Unit]
-Description=daemon for Valve Controller Web Serice
+Description=Daemon for Pump Reader Web Serice
 After=network.target
 
 
 [Service]
 User=pi
 Group=www-data
-RuntimeDirectory=gunicorn
+RuntimeDirectory=/home/pi/
 WorkingDirectory=/home/pi/
-ExecStart=/usr/bin/gunicorn3  --worker-class gthread --workers 1 --threads 1000 --bind=unix:/tmp/gunicorn.sock --access-logfile=/home/pi/logs/gunicorn-access.log --error-logfile=/home/pi/logs/gunicorn-error.log app:app
+Environment="PATH=/home/pi/.venv/bin"
+ExecStart=/home/pi/.venv/bin/gunicorn --worker-class gthread --workers 1 --threads 1000 --bind=unix:/tmp/gunicorn.sock --access-logfile=/home/pi/logs/gunicorn-access.log --error-logfile=/home/pi/logs/gunicorn-error.log  app:app
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s TERM $MAINPID
 

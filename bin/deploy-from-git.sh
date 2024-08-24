@@ -24,7 +24,7 @@ elif [ $LOCAL = $BASE ]; then
     cp -r ~/github/UCL-RPi-PumpReader/*  ~/
     echo -e "\033[0;33m **** all files copied **** \033[0m"
     echo -e "\033[0;33m **** setting flags on bin folder **** \033[0m"
-    chmod 755 ~/bin/*.sh
+    chmod 755 ~/bin/*
     echo -e "\033[0;33m **** restarting gunicorn and python **** \033[0m"
     sudo systemctl start gunicorn.service
     echo -e "\033[0;33m **** gunicorn started **** \033[0m"
