@@ -23,6 +23,7 @@ def get_cpu_temperature():
 
 
 def threadlister():
+    """List all threads in the application, used for debugging purposes only"""
     appthreads =[]
     for appthread in enumerate_threads():
         appthreads.append([appthread.name, appthread.native_id])
@@ -63,11 +64,12 @@ def api():
                         return jsonify(pressures()), 201
                 logger.warning('API: badly formed json message')
                 return 'badly formed json message - item not found', 201
-            logger.warning('API: access attempt using an invalid token from %s', request.headers[''])
+            logger.warning('API: access attempt using an invalid token from  %s', request.headers['X-Forwarded-For'])
             return 'access token(s) unuthorised', 401
         logger.warning('API: access attempt without a token from  %s', request.headers['X-Forwarded-For'])
         return 'access token(s) incorrect', 401
     except KeyError:
+        logger.warning('API: badly formed json message')
         return "badly formed json message", 201
 
 
