@@ -3,22 +3,30 @@ This is the main flask application - called by Gunicorn
 """
 import os
 import subprocess
-from threading import Timer
+from threading import Timer, enumerate as enumerate_threads
 from flask import Flask, render_template, jsonify, request
-from pumpclass import httpstatus, temperature, pressures, pyrometer
-from logmanager import  logger
-from settings import settings, VERSION
+from pumpclass import httpstatus, pressures
+from logmanager import logger
+from app_control import settings, VERSION
 
 
 app = Flask(__name__)
 logger.info('Starting Pump Reader web app version %s', VERSION)
 logger.info('Api-Key = %s', settings['api-key'])
 
+
 def get_cpu_temperature():
     """Read CPU temperature"""
     with open(settings['cputemp'], 'r', encoding='utf-8') as f:
         log = f.readline()
     return round(float(log)/1000, 1)
+
+
+def threadlister():
+    appthreads =[]
+    for appthread in enumerate_threads():
+        appthreads.append([appthread.name, appthread.native_id])
+    return appthreads
 
 
 def get_log_data(file_path):
@@ -33,7 +41,7 @@ def index():
     """Main web page handler, shows status page via the index.html template"""
     cputemperature = get_cpu_temperature()
     return render_template('index.html', pressures=httpstatus(), cputemperature=cputemperature,
-                           version=VERSION)
+                           version=VERSION, threadcount=threadlister())
 
 
 @app.route('/api', methods=['POST'])
@@ -45,19 +53,8 @@ def api():
         if 'Api-Key' in request.headers.keys():  # check api key exists
             if request.headers['Api-Key'] == settings['api-key']:  # check for correct API key
                 item = request.json['item']
-                if item == 'gettemperature':
-                    return jsonify(temperature()), 201
                 if item == 'getpressures':
                     return jsonify(pressures()), 201
-                if item == 'resetmax':
-                    pyrometer.resetmax()
-                    return jsonify(pressures()), 201
-                if item == 'laser':
-                    if request.json['command'] == "on":
-                        pyrometer.laseron()
-                    else:
-                        pyrometer.laseroff()
-                    return jsonify(temperature()), 201
                 if item == 'restart':
                     if request.json['command'] == 'pi':
                         logger.info('Restart command recieved: system will restart in 15 seconds')
@@ -82,6 +79,7 @@ def showplogs():
     return render_template('logs.html', rows=logs, log='Pump Reader Application Log',
                            cputemperature=cputemperature, version=VERSION)
 
+
 @app.route('/guaccesslog')
 def showgalogs():
     """Displays the Gunicorn access log file via the logs.html template"""
@@ -89,6 +87,7 @@ def showgalogs():
     logs = get_log_data(settings['gunicornpath'] + 'gunicorn-access.log')
     return render_template('logs.html', rows=logs, log='gunicorn access log',
                            cputemperature=cputemperature, version=VERSION)
+
 
 @app.route('/guerrorlog')
 def showgelogs():

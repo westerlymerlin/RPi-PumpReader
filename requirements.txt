@@ -1,3 +1,6 @@
-Flask
-rpi.gpio
+flask
+rpi.lgpio
 pyserial
+hidapi
+adafruit-circuitpython-lis3dh
+gunicorn

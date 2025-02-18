@@ -6,7 +6,7 @@ write to the log.
 import os
 import logging
 from logging.handlers import RotatingFileHandler
-from settings import settings
+from app_control import settings
 
 # Ensure log directory exists
 log_dir = os.path.dirname(settings['logfilepath'])

@@ -5,14 +5,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="refresh" content="60" >
-<title>London Geochronology Centre - Helium Line - Pump and Pyrometer Reader</title>
+<title>London Geochronology Centre - Helium Line - Pump Reader</title>
 <link href="{{ url_for('static',filename='css/text.css') }}" rel="stylesheet" type="text/css">
 <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
 </head>
 <body>
 	  <section class="banner">
 		  <div >
-               <P class="logo">London Geochronology Centre - Pump and Pyrometer Reader Server Status &nbsp CPU {{cputemperature}}&deg;C</P>
+               <P class="logo">London Geochronology Centre - Pump Reader Server Status &nbsp CPU {{cputemperature}}&deg;C</P>
               <p class="breadcrumbtext"><a href = "/" class="breadcrumblink">Return to index</a> &nbsp|&nbsp
               <a href = "/pylog" class="breadcrumblink">Application Log</a> &nbsp|&nbsp
               <a href = "/guaccesslog" class="breadcrumblink">Website Access Log</a> &nbsp|&nbsp
@@ -28,29 +28,27 @@
                 <td class="tabledataleft"><B>Status</B></td>
             </thead>
             <tr>
-                    <td class="tabledataleft">Turbo Pump Pressure</td>
+                    <td class="tabledataleft">Turbo Pump Pressure ({{pressures['turbounits']}})</td>
                     <td class="tabledataleft">{{pressures['turbo']}}</td>
             </tr>
             <tr>
-                    <td class="tabledataleft">Tank Pressure</td>
+                    <td class="tabledataleft">Tank Pressure ({{pressures['tankunits']}})</td>
                     <td class="tabledataleft">{{pressures['tank']}}</td>
             </tr>
             <tr>
-                    <td class="tabledataleft">Ion Pump Pressure</td>
+                    <td class="tabledataleft">Ion Pump Pressure ({{pressures['ionunits']}})</td>
                     <td class="tabledataleft">{{pressures['ion']}}</td>
             </tr>
             <tr>
-                    <td class="tabledataleft">Pyrometer Temperature</td>
-                    <td class="tabledataleft">{{pressures['temperature']}}</td>
+                    <td class="tabledataleft">N2 gas Pressure ({{pressures['gasunits']}})</td>
+                    <td class="tabledataleft">{{pressures['gas']}}</td>
             </tr>
+            {% for thread in threadcount %}
             <tr>
-                    <td class="tabledataleft">Pyrometer Temperature</td>
-                    <td class="tabledataleft">{{pressures['maxtemperature']}}</td>
+                    <td class="tabledataleft">{{thread[0]}}</td>
+                    <td class="tabledataleft">{{thread[1]}}</td>
             </tr>
-            <tr>
-                    <td class="tabledataleft">Pyrometer Laser Rangefinder</td>
-                    <td class="tabledataleft">{{pressures['pyrolaser']}}</td>
-            </tr>
+            {% endfor %}
       </table>
     <p>&nbsp</p>
 	</section>
