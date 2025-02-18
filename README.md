@@ -1,8 +1,9 @@
 # Pump Reader
 
-### Python project to read the Pfeiffer Vacuum gauges and a micro-epsilon infrared pyrometer. and is controlled via an HTTP API
+### Python project to read the Pfeiffer Vacuum gauges and is controlled via an HTTP API
 
-It uses CH-340 USB to RS232 adapters for comms. 
+It uses CH-340 USB to RS232 adapters for Serial comms and a MCP2221 usb analog to digital convertor to read froma pressure transducer.
+
 
 
 `app.py`			    Flask application that manages the API 
@@ -15,15 +16,7 @@ It uses CH-340 USB to RS232 adapters for comms.
 
 ### JSON Commands
  
-`{'getpressures', 1}` Return the pump pressures
+`{'getpressures', 1}` Return the vaccum and gas pressures
 
-`{'gettemperature', 1}` Return the pyrometer temperature and maximum attained temperature
-
-`{'resetmax', 1}` Reset the maximum pyrometer temperature reading
-
-`{'laser', 'off'}` Switch off the rangefinder laser    
-
-`{'laser', 'on'}` Switch on the rangefinder laser   
-
-`{'restart', 'pi'}` reboot the raspberry pi after 15 second delay   
+ 
 
