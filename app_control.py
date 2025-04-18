@@ -23,6 +23,7 @@ def generate_api_key(key_len):
 def initialise():
     """These are the default values written to the settings.json file the first time the app is run"""
     isettings = {'LastSave': '01/01/2000 00:00:01',
+                 'app-name': 'UCL Helium Line Pump Reader',
                  'api-key': 'change-me',
                  'cputemp': '/sys/class/thermal/thermal_zone0/temp',
                  'gunicornpath': './logs/',

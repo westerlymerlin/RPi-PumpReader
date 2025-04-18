@@ -6,13 +6,12 @@ It uses CH-340 USB to RS232 adapters for Serial comms and a MCP2221 usb analog t
 
 
 
-`app.py`			    Flask application that manages the API 
+Application dcumentaton can be found in [readme.pdf](./README.pdf)
 
-----------------------------------------------------
+Python module documentation can be found in the folder: [docs](./docs/readme.md)
 
-`pumpclass.py`		reads the pumps connected to CH-340 USB to RS232 adapters
+Change log can be found in the file [changelog.txt](./changelog.txt)
 
-`README.pdf`		software description and details how to setup on a Raspberry Pi
 
 ### JSON Commands
  
