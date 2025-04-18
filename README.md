@@ -15,7 +15,7 @@ Change log can be found in the file [changelog.txt](./changelog.txt)
 
 ### JSON Commands
  
-`{'getpressures', 1}` Return the vaccum and gas pressures
+`{'getpressures', 1}` Return the vacuum and gas pressures
 
  
 
