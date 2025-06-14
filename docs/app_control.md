@@ -1,16 +1,4 @@
-# Contents for: app_control
-
-* [app\_control](#app_control)
-  * [random](#app_control.random)
-  * [json](#app_control.json)
-  * [datetime](#app_control.datetime)
-  * [VERSION](#app_control.VERSION)
-  * [writesettings](#app_control.writesettings)
-  * [generate\_api\_key](#app_control.generate_api_key)
-  * [initialise](#app_control.initialise)
-  * [readsettings](#app_control.readsettings)
-  * [loadsettings](#app_control.loadsettings)
-  * [settings](#app_control.settings)
+# None
 
 <a id="app_control"></a>
 
