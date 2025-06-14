@@ -1,5 +1,21 @@
 """
-This is the main flask application - called by Gunicorn
+Pump Reader Web Application
+
+This Flask application serves as a web interface for monitoring and controlling
+a pump system. It provides:
+
+- A web dashboard showing real-time pump pressure readings and system status
+- REST API endpoints for programmatic access to pump data and control functions
+- System monitoring capabilities including CPU temperature and log viewing
+- Remote system control functions (restart)
+
+The application is designed to run on a Raspberry Pi using Gunicorn as the WSGI server.
+
+Usage:
+    - Run directly: python app.py (development)
+    - Run with Gunicorn: gunicorn app:app (production)
+
+Configuration is loaded from app_control.settings
 """
 import os
 import subprocess
@@ -16,14 +32,40 @@ logger.info('Api-Key = %s', settings['api-key'])
 
 
 def get_cpu_temperature():
-    """Read CPU temperature"""
+    """
+    Reads the CPU temperature from a file specified in the settings and returns
+    the temperature in Celsius, rounded to one decimal place.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the file specified in settings['cputemp'] does not exist.
+
+    ValueError
+        If the temperature read from the file cannot be converted to a float.
+
+    Returns
+    -------
+    float
+        The CPU temperature in Celsius, rounded to one decimal place.
+    """
     with open(settings['cputemp'], 'r', encoding='utf-8') as f:
         log = f.readline()
     return round(float(log)/1000, 1)
 
 
 def threadlister():
-    """List all threads in the application, used for debugging purposes only"""
+    """
+    Generates a list of active threads in the application.
+
+    This function enumerates all threads currently active in the application and
+    compiles a list of their names and native thread IDs. The resulting list can
+    be used for monitoring active threads and their associated data.
+
+    Returns:
+        list: A list of lists, where each inner list contains the name and
+        native ID of an active thread as [str, int].
+    """
     appthreads =[]
     for appthread in enumerate_threads():
         appthreads.append([appthread.name, appthread.native_id])
@@ -31,7 +73,17 @@ def threadlister():
 
 
 def get_log_data(file_path):
-    """Reads a file's lines and returns them in reverse order"""
+    """
+    Reads log data from a file and returns the lines in reverse order. This function
+    opens the specified file, reads all lines into memory, and then returns them
+    as a list in reversed order.
+
+    Args:
+        file_path (str): Path to the file containing the log data.
+
+    Returns:
+        list[str]: A list of log lines in reversed order.
+    """
     with open(file_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
     return list(reversed(lines))
@@ -39,7 +91,20 @@ def get_log_data(file_path):
 
 @app.route('/')
 def index():
-    """Main web page handler, shows status page via the index.html template"""
+    """
+    Function that serves as the root endpoint for a web application. It collects various system
+    metrics, including CPU temperature, HTTP status pressures, and the number of threads, and
+    renders them along with the application version into an HTML template for display.
+
+
+    Returns:
+        str: Rendered HTML content of the 'index.html' template with the following parameters:
+             - pressures: The current HTTP status pressures retrieved from the httpstatus function.
+             - cputemperature: The current CPU temperature obtained from the get_cpu_temperature
+               function.
+             - version: The application version defined by the global variable VERSION.
+             - threadcount: The total number of threads fetched from the threadlister function.
+    """
     cputemperature = get_cpu_temperature()
     return render_template('index.html', pressures=httpstatus(), cputemperature=cputemperature,
                            version=VERSION, threadcount=threadlister())
@@ -47,7 +112,22 @@ def index():
 
 @app.route('/api', methods=['POST'])
 def api():
-    """API Endpoint for programatic access - needs request data to be posted in a json file"""
+    """
+    Handles API POST requests to perform various actions such as retrieving pressure data or
+    restarting the system. Validates the API key present in the request headers to ensure
+    authorized access.
+
+
+    Returns:
+        Response object with JSON data or a string message indicating success, failure, or
+        an error. The HTTP status code is also included in the response. The content of the
+        response depends on the provided 'item' in the request data and the validity of the
+        API key.
+
+    Raises:
+        KeyError: If the required 'item' or 'command' keys are missing from the
+        request payload.
+    """
     try:
         logger.debug('API headers: %s', request.headers)
         logger.debug('API request: %s', request.json)
@@ -75,7 +155,22 @@ def api():
 
 @app.route('/pylog')
 def showplogs():
-    """Displays the application log file via the logs.html template"""
+    """
+    Handles the '/pylog' route to display log data and system information.
+
+    This function retrieves CPU temperature and log data, then renders an HTML
+    template to display the logs along with additional system information such
+    as the application's version and current CPU temperature.
+
+    Returns:
+        flask.Response: A rendered HTML response displaying the log data, application
+                        name, CPU temperature, and version.
+
+    Raises:
+        No explicit exceptions are raised by this function, but exceptions may
+        propagate from `get_cpu_temperature`, `get_log_data`, or `render_template`.
+
+    """
     cputemperature = get_cpu_temperature()
     logs = get_log_data(settings['logfilepath'])
     return render_template('logs.html', rows=logs, log='Pump Reader Application Log',
@@ -102,7 +197,19 @@ def showgelogs():
 
 @app.route('/syslog')  # display the raspberry pi system log
 def showslogs():
-    """Displays the last 200 lines of the system log via the logs.html template"""
+    """
+    Displays the Raspberry Pi system log, CPU temperature, and version information
+    formatted in an HTML template.
+
+    Retrieves the CPU temperature by reading a specified file, processes the
+    system logs using the 'journalctl' command, and renders a web page with
+    the logs and details.
+
+
+    Returns:
+        Response: An assembled HTML response rendering the logs, CPU temperature,
+        and version information on a web page.
+    """
     with open(settings['cputemp'], 'r', encoding='utf-8') as f:
         log = f.readline()
     f.close()
@@ -116,7 +223,16 @@ def showslogs():
 
 
 def reboot():
-    """Reboots the Raspberry Pi"""
+    """
+    Initiates a system reboot by using a command through the operating system.
+
+    This function logs a warning message indicating that the system is restarting
+    and subsequently executes the system reboot command.
+
+    Raises:
+        OSError: If the command execution fails for any reason (e.g., permission
+        issues, unavailable system commands).
+    """
     logger.warning('System is restarting now')
     os.system('sudo reboot')
 

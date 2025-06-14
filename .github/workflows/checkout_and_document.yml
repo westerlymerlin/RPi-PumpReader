@@ -1,0 +1,18 @@
+name: Code checks, DocuCode and create a pr to merge to the master branch
+run-name: WesterlyMerlin Python Checks
+
+on:
+  push:
+    branches:
+      - '**'
+      - '!master'
+      - '!DocUCode'
+
+jobs:
+  checkout-and-document:
+    permissions:
+      contents: write
+    uses: westerlymerlin/pyAutomate/.github/workflows/docs_from_code_linux.yml@master
+    secrets:
+      GH_ACTION_SECRET: ${{ secrets.ACTIONSECRET }}
+
